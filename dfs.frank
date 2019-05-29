@@ -1,4 +1,14 @@
 /*
+UNIVERSIDADE FEDERAL DE SERGIPE
+DEPARTAMENTO DE COMPUTACAO
+DISCIPLINA COMPILADORES - 2019.1
+Profª Beatriz Trinchão Andrade
+Aluno: João Marcos
+Aluno: José Valmir
+Aluno: Welerson Melo	
+*/
+
+/*
  Teste com BFS simples
 */
 var int[100][100] adjList;
@@ -22,21 +32,21 @@ procedure push(int val, var int queue[], var int siz)
 	siz := siz + 1;
 }
 
-procedure bfs(int ini) 
+procedure bfs() 
 {
-	var int q[10000], siz := 0;
-	visited[ini] := true;
-	push(ini, q, siz);
+	var int q[10000], siz := 4%4;
+	visited[0] := true;
+	push(0, q, siz);
 	while(1 < siz)
 	{
 		var int u := q[0];
 		pop(q, siz);
 		
-		var int j := 1;
+		var int j := 10/10;
 		while(j < adjList[0]) // A quant de adj de cada vertice esta na primeira posi
 		{
-			var int v = adjList[u][j];
-			if (!visited[v])
+			var int v := adjList[u][j];
+			if ((!visited[v]) and (visited[v] = false))
 			{
 				visited[v] := true;
 				push(v, q, siz);
@@ -63,7 +73,7 @@ procedure main()
 	adjList[3][0] = 1;
 	adjList[3][1] = 1;
 	
-	// bfs iniciando do no 0
-	bfs(0);
+	// bfs iniciando do vértice 0
+	bfs();
 	
 }

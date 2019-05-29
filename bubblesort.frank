@@ -1,0 +1,28 @@
+/*
+UNIVERSIDADE FEDERAL DE SERGIPE
+DEPARTAMENTO DE COMPUTACAO
+DISCIPLINA COMPILADORES - 2019.1
+Profª Beatriz Trinchão Andrade
+Aluno Jose Valmir
+*/
+
+/* programa exemplo em Frank, ordenação de vetores de tamanho 6*/
+
+var int i := 0;
+var bool troca := true;
+var int aux := 0;
+var int x:= [3,7,8,9,10,11]
+
+procedure bublleSort (var int vetor[]){
+	while(troca){
+		troca := false;
+		while(i<(6-1)){
+			if(vetor[i+1] < vetor[i]){
+				aux := vetor[i];
+				vetor[i] := vetor[i+1]
+				vetor[i+1] := aux;
+				troca := true;
+			}
+		}
+	}
+}

@@ -5,13 +5,18 @@ Helpers
  espaco = ' ';
  rc = 13;
  nl = 10;
+ tb = 9;
  letraminuscula = ['a' .. 'z'];
  letramaiuscula = ['A' .. 'Z'];
  letra = (letraminuscula | letramaiuscula);
  underline = '_';
+ all_char = [0 .. 254];
+ letra_hexa = (['a'..'f'] | ['A'..'F']);
  
 Tokens
- number        = digito+;
+ number_decimal= digito+;
+ number_real   = digito+'.'digito+;
+ number_hexa   = '0''x'(digito | letra_hexa)+; 
  plus          = '+';
  minus         = '-';
  mult          = '*';
@@ -34,7 +39,7 @@ Tokens
  l_chaves      = '{';
  r_chaves      = '}';
  
- blank         = (espaco | rc | nl)+;
+ blank         = (espaco | rc | nl | tb)+;
  if            = 'i''f';
  then          = 't''h''e''n';
  else          = 'e''l''s''e';
@@ -45,14 +50,23 @@ Tokens
  real          = 'r''e''a''l';
  function      = 'f''u''n''c''t''i''o''n';
  procedure     = 'p''r''o''c''e''d''u''r''e';
+ print		   = 'p''r''i''n''t';
+ size		   = 's''i''z''e';
+ read		   = 'r''e''a''d';
  
  var           = 'v''a''r';
  cons          = 'c''o''n''s';
  
-
+ vert_bar 	   = '|';
  
  identificador = (underline | letra)(underline | letra | digito)*;
-
+ 
+ comment_block = '/''*' all_char* '*''/';
+ comment_line  = '/''/' [all_char - ['/'+nl]]* nl;
+ 
+ 
 
 Ignored Tokens
- blank;
+ blank,
+ comment_block,
+ comment_line;

@@ -1,72 +1,71 @@
-Package calculadora;
+Package frank;
 
 Helpers
- digito = ['0' .. '9'];
- espaco = ' ';
- rc = 13;
- nl = 10;
- tb = 9;
+ digito         = ['0' .. '9'];
+ espaco         = ' ';
+ rc             = 13;
+ nl             = 10;
+ tb             = 9;
  letraminuscula = ['a' .. 'z'];
  letramaiuscula = ['A' .. 'Z'];
- letra = (letraminuscula | letramaiuscula);
- underline = '_';
- all_char = [0 .. 254];
- letra_hexa = (['a'..'f'] | ['A'..'F']);
+ letra          = (letraminuscula | letramaiuscula);
+ underline      = '_';
+ all_char       = [0 .. 254];
+ letra_hexa     = (['a'..'f'] | ['A'..'F']);
  
 Tokens
- number_decimal= digito+;
- number_real   = digito+'.'digito+;
- number_hexa   = '0''x'(digito | letra_hexa)+; 
- plus          = '+';
- minus         = '-';
- mult          = '*';
- div           = '/';
- mod           = '%';
+ number_decimal = digito+;
+ number_real    = digito+'.'digito+;
+ number_hexa    = '0''x'(digito | letra_hexa)+; 
+ plus           = '+';
+ minus          = '-';
+ mult           = '*';
+ div            = '/';
+ mod            = '%';
  
- atribuicao    = ':''=';
- menor         = '<';
- igual         = '=';
- not           = '!';
- and           = 'a''n''d';
- or            = 'o''r';
+ atribuicao     = ':''=';
+ menor          = '<';
+ igual          = '=';
+ not            = '!';
+ and            = 'a''n''d';
+ or             = 'o''r';
  
- l_par         = '(';
- r_par         = ')';
- virgula       = ',';
- final_linha   = ';';
- l_col         = '[';
- r_col         = ']';
- l_chaves      = '{';
- r_chaves      = '}';
+ vert_bar 	    = '|';
+ l_par          = '(';
+ r_par          = ')';
+ virgula        = ',';
+ final_linha    = ';';
+ l_col          = '[';
+ r_col          = ']';
+ l_chaves       = '{';
+ r_chaves       = '}';
  
- blank         = (espaco | rc | nl | tb)+;
- if            = 'i''f';
- then          = 't''h''e''n';
- else          = 'e''l''s''e';
- while         = 'w''h''i''l''e';
+ blank          = (espaco | rc | nl | tb)+;
+ if             = 'i''f';
+ then           = 't''h''e''n';
+ else           = 'e''l''s''e';
+ while          = 'w''h''i''l''e';
  
- int           = 'i''n''t';
- bool          = 'b''o''o''l';
- real          = 'r''e''a''l';
- function      = 'f''u''n''c''t''i''o''n';
- procedure     = 'p''r''o''c''e''d''u''r''e';
- print		   = 'p''r''i''n''t';
- size		   = 's''i''z''e';
- read		   = 'r''e''a''d';
+ int            = 'i''n''t';
+ bool           = 'b''o''o''l';
+ real           = 'r''e''a''l';
+ function       = 'f''u''n''c''t''i''o''n';
+ procedure      = 'p''r''o''c''e''d''u''r''e';
+ print		    = 'p''r''i''n''t';
+ size		    = 's''i''z''e';
+ read		    = 'r''e''a''d';
  
- var           = 'v''a''r';
- cons          = 'c''o''n''s';
+ var            = 'v''a''r';
+ cons           = 'c''o''n''s';
  
- vert_bar 	   = '|';
+ identificador  = (underline | letra)(underline | letra | digito)*;
  
- identificador = (underline | letra)(underline | letra | digito)*;
- 
- comment_block = '/''*' all_char* '*''/';
- comment_line  = '/''/' [all_char - ['/'+nl]]* nl;
- 
+ comment_block  = '/''*' [all_char - [ '*' + '/' ] ]* '*''/';
+ comment_line   = '/''/' [all_char - ['/'+nl]]* nl;
  
 
 Ignored Tokens
  blank,
  comment_block,
  comment_line;
+

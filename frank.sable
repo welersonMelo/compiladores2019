@@ -12,6 +12,8 @@ Helpers
  underline      = '_';
  all_char       = [0 .. 254];
  letra_hexa     = (['a'..'f'] | ['A'..'F']);
+ not_star       = [all_char-'*'];
+ not_star_slash = [not_star-'/'];
  
 Tokens
  number_decimal = digito+;
@@ -60,7 +62,7 @@ Tokens
  
  identificador  = (underline | letra)(underline | letra | digito)*;
  
- comment_block  = '/''*' [all_char - [ '*' + '/' ] ]* '*''/';
+ comment_block  = '/''*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
  comment_line   = '/''/' [all_char - ['/'+nl]]* nl;
  
 
@@ -69,3 +71,7 @@ Ignored Tokens
  comment_block,
  comment_line;
 
+Productions
+  
+ 
+ 

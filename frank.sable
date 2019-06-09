@@ -72,6 +72,6 @@ Ignored Tokens
  comment_line;
 
 Productions
-  
+ declaracao = var int identificador atribuicao  number_decimal final_linha;
  
  

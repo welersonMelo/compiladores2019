@@ -1,0 +1,7 @@
+#ignore arquivos gerados pelo sable e pelo java
+
+frank/bin/
+frank/src/frank/analysis/
+frank/src/frank/lexer/
+frank/src/frank/node/
+frank/src/frank/parser/

@@ -20,17 +20,17 @@ public class Main
 					new Lexer(
 							new PushbackReader(  
 									new FileReader(arquivo), 1024)); 
-			Token token;
-			while(!((token = lexer.next()) instanceof EOF)) {
-				System.out.print(token.getClass());
-				System.out.println(" ( "+token.toString()+")");
-			}
+			
+			//Printer.printTokens(lexer);
 			
 			Parser parser = new Parser(lexer);
 			
-			Start str = parser.parse();
+			Start start = parser.parse();
 			
-			PDeclaracao pde = str.getPDeclaracao();
+			System.out.println(start.toString());
+			
+			
+			//PDeclaracao pde = start.getPDeclaracao();
 			
 			
 			

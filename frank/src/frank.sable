@@ -72,6 +72,7 @@ Ignored Tokens
  comment_line;
 
 Productions
- declaracao = var int identificador atribuicao  number_decimal final_linha;
+ declaracao = T.var T.int T.identificador T.atribuicao T.number_decimal T.final_linha;
+ 
  
  

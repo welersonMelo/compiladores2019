@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+rm -r frank/analysis frank/lexer frank/node frank/parser
+echo "folders removed"
+sablecc frank.sable

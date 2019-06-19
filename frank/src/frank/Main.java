@@ -14,7 +14,7 @@ public class Main
 //			if(args[0] != null) {
 //				arquivo = args[0];
 //			}
-			arquivo = "teste/teste.frank";
+			arquivo = "teste.frank";
 
 			Lexer lexer =
 					new Lexer(

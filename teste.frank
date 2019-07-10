@@ -1,5 +1,3 @@
 var int x1, x2, x3 := 1;
 cons int y ;
 var bool cond := 1;
-procedure
-function

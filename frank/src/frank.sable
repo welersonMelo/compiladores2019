@@ -149,19 +149,18 @@ Productions
  cal_exp   = {soma_recursao} cal_exp soma termo 
 	       | {termo_base}    termo;
 
- soma      = {mais}  plus 
-	       | {menor} minus;
-
  termo     = {termo_recursao} termo mult_div fator 
            | {fator_base}     fator;
+           
+ fator     = {com_parentes} l_par cal_exp r_par 
+	       | {numero} numeral;
 
  mult_div  = {vezes} mult 
            | {divisao} div 
 	       | {modulo}  mod;
-
-	
- fator     = {com_parentes} l_par cal_exp r_par 
-	       | {numero} numeral;
+ 
+ soma      = {mais}  plus 
+	       | {menor} minus;
  
  bool_exp  = ; // Fazer depois
  

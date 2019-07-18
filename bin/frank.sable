@@ -75,65 +75,94 @@ Ignored Tokens
 
 Productions
 
- programa = {decs} dec_var_const* dec_proc_fun*;
- dec_var_const = {variavel} dec_var | {const} dec_const;
+ programa           = {decs}     dec_var_const* dec_proc_fun*;
+ dec_var_const      = {variavel} dec_var 
+			        | {const}    dec_const;
  
- dec_var = {dec} var declaracao;
+ dec_var            = {dec} var declaracao;
  
- dec_const = {constante} cons declaracao;
+ dec_const          = {constante} cons declaracao;
  
- declaracao = {declaracao} tipo id_inicializacao outras_declaracoes* final_linha;
+ declaracao         = {declaracao} tipo id_inicializacao outras_declaracoes* final_linha;
+
  outras_declaracoes = {varios} virgula id_inicializacao;
- id_inicializacao = {id} identificador | {inicial} inicializacao;
+
+ id_inicializacao   = {id}      identificador 
+                    | {inicial} inicializacao;
  
- inicializacao = {inicializacao} identificador atribuicao tipo_exp;
+ inicializacao      = {inicializacao} identificador atribuicao tipo_exp;
   
- tipo_exp = {expressao} exp | {array_ext} array_ext | {array_comp} array_comp;
+ tipo_exp           = {expressao}  exp 
+                    | {array_ext}  array_ext 
+		            | {array_comp} array_comp;
  
- array_ext = l_col r_col; //Completar depois
- array_comp = l_col r_col; //Completar depois
+ array_ext          = l_col r_col; //Completar depois
+ array_comp         = l_col r_col; //Completar depois
  
- tipo = {tipobase} tipo_base | {tipocomposto} tipo_base l_col exp r_col;
+ tipo               = {tipobase}     tipo_base 
+                    | {tipocomposto} tipo_base l_col exp r_col;
  
- tipo_base = {inteiro} int |
- 			 {real} real |
- 			 {boleano} bool;
+ tipo_base          = {inteiro} int 
+                    | {real}    real 
+		            | {boleano} bool;
  			 	
- dec_proc_fun = {proc} dec_proc | {fun} dec_fun;
- dec_proc = procedure identificador l_par parametros r_par comando;
- dec_fun = function tipo identificador l_par parametros r_par exp;
+ dec_proc_fun       = {proc} dec_proc 
+                    | {fun}  dec_fun;
+
+ dec_proc           = procedure identificador l_par parametros r_par comando;
+
+ dec_fun            = function tipo identificador l_par parametros r_par exp;
  
- parametros = {vazio} | {parametros} parametro outros_parametros*;
- outros_parametros = virgula parametro;  
- parametro = l_col var r_col tipo_parametro identificador;
+ parametros         = {vazio} 
+                    | {parametros} parametro outros_parametros*;
+
+ outros_parametros  = virgula parametro;  
+
+ parametro          = l_col var r_col tipo_parametro identificador;
  
- tipo_parametro = {tipobase} tipo_base | {tipo_parametro} tipo_parametro l_col r_col;
+ tipo_parametro     = {tipobase}       tipo_base 
+                    | {tipo_parametro} tipo_parametro l_col r_col;
  
  //Completar depois abaixo
- comando =  
-  	 {bloco} bloco; 
+ comando            = {bloco} bloco; 
   
- bloco = l_chaves dec_var_const* comando r_chaves;
+ bloco              = l_chaves dec_var_const* comando r_chaves;
  
- numeral = {int}number_decimal | {real}number_real | {hexa}number_hexa;
+ numeral            = {int}  number_decimal 
+                    | {real} number_real 
+		            | {hexa} number_hexa;
  
  //COMPLETAR EXP
- exp = 
- 	{verdade}true | {falso}false | //{numero}numeral | ERRO AO COLOCAR NUMERO AQUI
- 	{chamda} chamada | {menos} minus exp | {bloco_exp} bloco_exp |
- 	{expcalculo} cal_exp | {expbool} bool_exp;
+ exp       = 
+             {verdade}true 
+           | {falso}false 
+        // | {numero}numeral  ERRO AO COLOCAR NUMERO AQUI
+           | {chamda} chamada 
+           | {menos} minus exp 
+           | {bloco_exp} bloco_exp 
+           | {expcalculo} cal_exp 
+           | {expbool} bool_exp;
  	
  
  bloco_exp = l_chaves dec_const* exp r_chaves;
  
- cal_exp = 
-	 {soma_recursao} cal_exp soma termo | {termo_base}termo;
-	 soma = {mais} plus | {menor}minus;
-	 termo = {termo_recursao} termo mult_div fator | {fator_base}fator;
-	 mult_div = {vezes} mult | {divisao} div | {modulo} mod;
-	 fator = {com_parentes} l_par cal_exp r_par | {numero} numeral;
+ cal_exp   = {soma_recursao} cal_exp soma termo 
+	       | {termo_base}    termo;
+
+ termo     = {termo_recursao} termo mult_div fator 
+           | {fator_base}     fator;
+           
+ fator     = {com_parentes} l_par cal_exp r_par 
+	       | {numero} numeral;
+
+ mult_div  = {vezes} mult 
+           | {divisao} div 
+	       | {modulo}  mod;
  
- bool_exp = ; // Fazer depois
+ soma      = {mais}  plus 
+	       | {menor} minus;
  
- chamada = ; //Fazer depois
+ bool_exp  = ; // Fazer depois
+ 
+ chamada   = ; //Fazer depois
    

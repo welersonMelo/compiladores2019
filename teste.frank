@@ -1,5 +1,12 @@
-var int x1, x2, x3 := 1;
 cons int y ;
-var bool cond := true;
+var int x1, x2, x3 := (2 + 3) * 4.2;//k;
+var bool cond := true or false;
 //var arr [14];
+
+procedure main() {
+	var int teste := 1;
+	
+}
+//ERROR AQUI: 
+Dúvida para tirar com a prof: o procedure não pode ser vazio ou conter somente declarações?
 

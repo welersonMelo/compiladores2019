@@ -100,7 +100,7 @@ Productions
  array_comp         = l_col r_col; //Completar depois
  
  tipo               = {tipobase}     tipo_base 
-                    | {tipocomposto} tipo_base l_col exp r_col;
+                    | {tipocomposto} tipo_base l_col cal_exp r_col;
  
  tipo_base          = {inteiro} int 
                     | {real}    real 
@@ -123,8 +123,8 @@ Productions
  tipo_parametro     = {tipobase}       tipo_base 
                     | {tipo_parametro} tipo_parametro l_col r_col;
  
- //Completar depois abaixo
- comando            = {bloco} bloco; 
+ 
+ comando            = {bloco} bloco; //Completar depois 
   
  bloco              = l_chaves dec_var_const* comando r_chaves;
  
@@ -133,11 +133,7 @@ Productions
 		            | {hexa} number_hexa;
  
  //COMPLETAR EXP
- exp       = 
-             {verdade}true 
-           | {falso}false 
-        // | {numero}numeral  ERRO AO COLOCAR NUMERO AQUI
-           | {chamda} chamada 
+ exp       = {chamda} chamada 
            | {menos} minus exp 
            | {bloco_exp} bloco_exp 
            | {expcalculo} cal_exp 
@@ -146,23 +142,32 @@ Productions
  
  bloco_exp = l_chaves dec_const* exp r_chaves;
  
+ //Vou colocar como padrão todos q a producao principal(neste caso cal_exp) é dependente dois espaço a mais pra dentro
  cal_exp   = {soma_recursao} cal_exp soma termo 
 	       | {termo_base}    termo;
-
- termo     = {termo_recursao} termo mult_div fator 
+   termo     = {termo_recursao} termo mult_div fator 
            | {fator_base}     fator;
-           
- fator     = {com_parentes} l_par cal_exp r_par 
-	       | {numero} numeral;
-
- mult_div  = {vezes} mult 
+   fator   = {com_parentes} l_par cal_exp r_par 
+	       | {numero} numeral
+	       | {id} identificador;
+	       
+   mult_div = {vezes} mult 
            | {divisao} div 
 	       | {modulo}  mod;
- 
- soma      = {mais}  plus 
+   soma     = {mais}  plus 
 	       | {menor} minus;
  
- bool_exp  = ; // Fazer depois
+ bool_exp     = {or_recursao} bool_exp or termo_bool
+ 			  | {termo_bool_base} termo_bool;
+   termo_bool = {termo_bool_recursao} termo_bool and neg 
+   			  | {neg_base} neg;
+   neg        = {com_negacao} not fator_bool
+   			  | {sem_negacao} fator_bool;
+   fator_bool = {com_par} l_par bool_exp r_par
+   			  | {verdade} true
+   			  | {falso} false;
+   			  //| {id} identificador;
+ 
  
  chamada   = ; //Fazer depois
    

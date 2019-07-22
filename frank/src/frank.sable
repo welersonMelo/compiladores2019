@@ -96,8 +96,11 @@ Productions
                     | {array_ext}  array_ext 
 		            | {array_comp} array_comp;
  
- array_ext          = l_col r_col; //Completar depois
- array_comp         = l_col r_col; //Completar depois
+ array_ext          = {arraye}   l_col exp seq_array_ext* r_col;
+ seq_array_ext      = {seqarray} virgula exp;
+
+ array_comp         = {arrayc}      l_col identificador vert_bar exp        r_col
+                    | {multiarrayc} l_col identificador vert_bar array_comp r_col;
  
  tipo               = {tipobase}     tipo_base 
                     | {tipocomposto} tipo_base l_col cal_exp r_col;
@@ -131,6 +134,8 @@ Productions
  numeral            = {int}  number_decimal 
                     | {real} number_real 
 		            | {hexa} number_hexa;
+
+ variavel = 
  
  //COMPLETAR EXP
  exp       = {chamda} chamada 

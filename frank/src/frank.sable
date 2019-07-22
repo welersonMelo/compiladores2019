@@ -135,7 +135,8 @@ Productions
                     | {real} number_real 
 		            | {hexa} number_hexa;
 
- variavel = 
+ variavel = {variavelid}  identificador
+          | {variavelexp} variavel l_col exp r_col;
  
  //COMPLETAR EXP
  exp       = {chamda} chamada 

@@ -184,10 +184,17 @@ Productions
  			 | {lista_virgula} exp virgula_exp*;
  	virgula_exp = {virgula_exp} virgula exp;	  
  
- 
- comando   = {while} while l_par cal_exp r_par comando 
+ outra 	   = {while} while l_par cal_exp r_par comando 
   			 | {atribuicao} var atribuicao cal_exp
   			 | {chamada_comando} chamada final_linha
- 			 | {bloco} bloco;  
- 			 //| {condicional} condicional;
+ 			 | {bloco} bloco;
  
+ comando   = {condicional} condicional;
+ 
+ condicional = {casado_cond} casam_cond | {sem_casam_cond} sem_casam_cond;
+   casam_cond = {if_else_casado} if l_par cal_exp r_par casam_cond else casam_cond2
+   				| {outra} outra;
+   casam_cond2 = {casam2}casam_cond;
+   sem_casam_cond = {if}if l_par cal_exp r_par condicional
+   					| {if_else_sem_casar} if l_par cal_exp r_par casam_cond else sem_casam_cond;
+ 			

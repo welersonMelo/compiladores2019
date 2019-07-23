@@ -124,10 +124,7 @@ Productions
  parametro          = l_col var r_col tipo_parametro identificador;
  
  tipo_parametro     = {tipobase}       tipo_base 
-                    | {tipo_parametro} tipo_parametro l_col r_col;
- 
- 
- comando            = {bloco} bloco; //Completar depois 
+                    | {tipo_parametro} tipo_parametro l_col r_col; 
   
  bloco              = l_chaves dec_var_const* comando r_chaves;
  
@@ -138,13 +135,15 @@ Productions
  variavel = {variavelid}  identificador
           | {variavelexp} variavel l_col exp r_col;
  
- //COMPLETAR EXP
  exp       = {chamda} chamada 
            | {menos} minus exp 
            | {bloco_exp} bloco_exp 
-           | {expcalculo} cal_exp 
-           | {expbool} bool_exp;
- 	
+           | {expcalculo} cal_exp
+           | {var} var
+           | {cond_ternaria} if l_par cal_exp r_par then cond2;
+ 
+ cond2 = {cond2} cal_exp else cond3;
+ cond3 = {cond3} cal_exp;  
  
  bloco_exp = l_chaves dec_const* exp r_chaves;
  
@@ -155,7 +154,7 @@ Productions
            | {fator_base}     fator;
    fator   = {com_parentes} l_par cal_exp r_par 
 	       | {numero} numeral
-	       | {id} identificador;
+	       | {bool_exp} bool_exp;
 	       
    mult_div = {vezes} mult 
            | {divisao} div 
@@ -163,17 +162,32 @@ Productions
    soma     = {mais}  plus 
 	       | {menor} minus;
  
- bool_exp     = {or_recursao} bool_exp or termo_bool
+ comparison   = {igual} igual | {menor} menor; 
+ bool_exp     = {compare_exp} bool_exp comparison bool_exp2 
+ 			  | {bool_exp2} bool_exp2; 
+ 	
+   bool_exp2  = {or_recursao} bool_exp2 or termo_bool
  			  | {termo_bool_base} termo_bool;
    termo_bool = {termo_bool_recursao} termo_bool and neg 
    			  | {neg_base} neg;
    neg        = {com_negacao} not fator_bool
    			  | {sem_negacao} fator_bool;
-   fator_bool = {com_par} l_par bool_exp r_par
-   			  | {verdade} true
-   			  | {falso} false;
-   			  //| {id} identificador;
+   fator_bool = 
+   			   {verdade} true
+   			  | {falso} false
+   			  | {id} identificador;
  
  
- chamada   = ; //Fazer depois
-   
+ chamada   = {chamada} identificador l_par lista_exp r_par;
+ 
+ lista_exp = {lista} 
+ 			 | {lista_virgula} exp virgula_exp*;
+ 	virgula_exp = {virgula_exp} virgula exp;	  
+ 
+ 
+ comando   = {while} while l_par cal_exp r_par comando 
+  			 | {atribuicao} var atribuicao cal_exp
+  			 | {chamada_comando} chamada final_linha
+ 			 | {bloco} bloco;  
+ 			 //| {condicional} condicional;
+ 

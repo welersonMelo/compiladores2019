@@ -75,126 +75,352 @@ Ignored Tokens
 
 Productions
 
- programa           = {decs}     dec_var_const* dec_proc_fun*;
+ programa           = {decs}     dec_var_const* dec_proc_fun* 
+ 						{-> New programa.decs([dec_var_const.dec_var_const], [dec_proc_fun.dec_proc_fun])};
+
  dec_var_const      = {variavel} dec_var 
 			        | {const}    dec_const;
+			             
  
- dec_var            = {dec} var declaracao;
+ dec_var            = {dec} var declaracao
+				    	{-> New dec_var.dec(declaracao.declaracao)};
  
- dec_const          = {constante} cons declaracao;
+ dec_const          = {constante} cons declaracao
+    					{-> New dec_const.dec(declaracao.declaracao)};
  
- declaracao         = {declaracao} tipo id_inicializacao outras_declaracoes* final_linha;
+ declaracao         = {declaracao} tipo id_inicializacao outras_declaracoes* final_linha
+ 						{-> New declaracao.declaracao(tipo.tipo, 
+ 														id_inicializacao.id_inicializacao,
+ 														[outras_declaracoes.outras_declaracoes])};
 
  outras_declaracoes = {varios} virgula id_inicializacao;
+ 						{-> New outras_declaracoes.varios(id_inicializacao.id_inicializacao)};
 
  id_inicializacao   = {id}      identificador 
                     | {inicial} inicializacao;
  
- inicializacao      = {inicializacao} identificador atribuicao tipo_exp;
-  
+ inicializacao      = {inicializacao} identificador atribuicao tipo_exp
+ 						{-> New inicializacao.inicializacao(tipo_exp.tipo_exp)};
+ 
  tipo_exp           = {expressao}  exp 
                     | {array_ext}  array_ext 
 		            | {array_comp} array_comp;
  
- array_ext          = {arraye}   l_col exp seq_array_ext* r_col;
- seq_array_ext      = {seqarray} virgula exp;
+ array_ext          = {arraye}   l_col exp seq_array_ext* r_col
+      					{-> New array_ext.arraye(exp.exp,
+      											   [seq_array_ext, seq_array_ext])};
+ 
+ seq_array_ext      = {seqarray} virgula exp
+ 						{-> New seq_array_ext.seq_array_ext(exp.texp)};
 
  array_comp         = {arrayc}      l_col identificador vert_bar exp        r_col
-                    | {multiarrayc} l_col identificador vert_bar array_comp r_col;
+ 						{-> New array_comp.arrayc(exp.exp)}
+                    | {multiarrayc} l_col identificador vert_bar array_comp r_col
+                    	{-> New array_comp.arrayc(array_comp.array_comp)};
  
  tipo               = {tipobase}     tipo_base 
-                    | {tipocomposto} tipo_base l_col cal_exp r_col;
+                    | {tipocomposto} tipo_base l_col cal_exp r_col
+                    	{-> New tipo.tipocomposto(tipo_base.tipo_base, cal_exp.cal_exp)};
+                    
+
  
  tipo_base          = {inteiro} int 
                     | {real}    real 
 		            | {boleano} bool;
+		            
+
  			 	
  dec_proc_fun       = {proc} dec_proc 
                     | {fun}  dec_fun;
+                    
 
- dec_proc           = procedure identificador l_par parametros r_par comando;
 
- dec_fun            = function tipo identificador l_par parametros r_par exp;
+ dec_proc           = {dec_proc} procedure identificador l_par parametros r_par comando
+ 						{-> New dec_proc.dec_proc(parametros.parametros, comando.comando)};
+ 
+
+
+ dec_fun            = {dec_fun} function tipo identificador l_par parametros r_par exp
+ 						{-> New dec_fun.dec_fun(tipo.tipo, 
+ 												parametros.parametros,
+ 												exp.exp)};
+  
  
  parametros         = {vazio} 
-                    | {parametros} parametro outros_parametros*;
+                    | {parametros} parametro outros_parametros*
+                    	{-> New parametros.parametros(parametro.parametro, 
+                    	[outros_parametros.outros_parametros])};
 
- outros_parametros  = virgula parametro;  
 
- parametro          = l_col var r_col tipo_parametro identificador;
+ outros_parametros  = {outros_parametros} virgula parametro
+ 						{-> New outros_parametros.outros_parametros(parametro.parametro)};
  
+
+ // isso aqui ta certo?
+ parametro          = {parametro} l_col var r_col tipo_parametro identificador
+ 						{-> New parametro.parametro(tipo_parametro.tipo_parametro)};
+ 
+ //nao entendi isso tambem
  tipo_parametro     = {tipobase}       tipo_base 
-                    | {tipo_parametro} tipo_parametro l_col r_col; 
+                    | {tipo_parametro} tipo_parametro l_col r_col
+                    	{-> New tipo_parametro.tipo_parametro(tipo_parametro.tipo_parametro)}; 
+                    
+
   
- bloco              = l_chaves dec_var_const* comando r_chaves;
+ bloco              = {bloco} l_chaves dec_var_const* comando r_chaves
+ 						{-> New bloco.bloco([dec_var_const.dec_var_const],
+ 											 comando.comando)};
  
  numeral            = {int}  number_decimal 
                     | {real} number_real 
 		            | {hexa} number_hexa;
 
- variavel = {variavelid}  identificador
-          | {variavelexp} variavel l_col exp r_col;
+ variavel 			= {variavelid}  identificador
+      				| {variavelexp} variavel l_col exp r_col
+      					{-> New variavel.ariavelexp(variavel.variavel, exp.exp)};
+          
+
+ //e esse memos era pra ser soma?
+ exp				= {chamada} chamada 
+    				| {menos} minus exp 
+    					{-> New exp.menos(exp.exp)}
+           			| {bloco_exp} bloco_exp 
+           			| {expcalculo} cal_exp
+           			| {var} var
+           			| {cond_ternaria} if l_par cal_exp r_par then cond2
+           				{-> New exp.cond_ternaria(cal_exp.cal_exp, cond2.cond2)};
+           
+     
  
- exp       = {chamda} chamada 
-           | {menos} minus exp 
-           | {bloco_exp} bloco_exp 
-           | {expcalculo} cal_exp
-           | {var} var
-           | {cond_ternaria} if l_par cal_exp r_par then cond2;
+ cond2 				= {cond2} cal_exp else cond3
+ 		 				{-> New cond2.cond2(cal_exp.cal_exp, cond3.cond3)};
+ 		 	
+ cond3 				= {cond3} cal_exp; 
  
- cond2 = {cond2} cal_exp else cond3;
- cond3 = {cond3} cal_exp;  
+ bloco_exp 			= {bloco_exp} l_chaves dec_const* exp r_chaves
+ 						{-> New bloco_exp.bloco_exp([dec_const.dec_const], exp.exp)};
  
- bloco_exp = l_chaves dec_const* exp r_chaves;
+  
  
  //Vou colocar como padrão todos q a producao principal(neste caso cal_exp) é dependente dois espaço a mais pra dentro
- cal_exp   = {soma_recursao} cal_exp soma termo 
-	       | {termo_base}    termo;
-   termo     = {termo_recursao} termo mult_div fator 
+ cal_exp   			= {soma_recursao} cal_exp soma termo 
+	       			| {termo_base}    termo;
+	       
+   
+	       
+ termo   = {termo_recursao} termo mult_div fator 
            | {fator_base}     fator;
-   fator   = {com_parentes} l_par cal_exp r_par 
+           
+      
+           
+ fator   = {com_parentes} l_par cal_exp r_par
+ 				{-> New fator.com_parentes(cal_exp.cal_exp)} 
 	       | {numero} numeral
 	       | {bool_exp} bool_exp;
 	       
-   mult_div = {vezes} mult 
+	          
+	       
+ mult_div = {vezes} mult 
            | {divisao} div 
 	       | {modulo}  mod;
-   soma     = {mais}  plus 
+	       
+	         
+	       
+ soma     = {mais}  plus 
 	       | {menor} minus;
  
  comparison   = {igual} igual | {menor} menor; 
+ 
  bool_exp     = {compare_exp} bool_exp comparison bool_exp2 
  			  | {bool_exp2} bool_exp2; 
+ 			  
+ 		
  	
-   bool_exp2  = {or_recursao} bool_exp2 or termo_bool
+ bool_exp2  = {or_recursao} bool_exp2 or termo_bool
+ 				{-> New bool_exp2.or_recursao(bool_exp2.bool_exp2, termo_bool.termo_bool)}
  			  | {termo_bool_base} termo_bool;
-   termo_bool = {termo_bool_recursao} termo_bool and neg 
+ 			  
+ 			  	   
+ 			  
+ termo_bool = {termo_bool_recursao} termo_bool and neg 
+ 				{-> New termo_bool.termo_bool_recursao(termo_bool.termo_bool, neg.neg)}
    			  | {neg_base} neg;
-   neg        = {com_negacao} not fator_bool
+   			  
+   			 
+   			  
+ neg        = {com_negacao} not fator_bool
+ 				{-> New neg.com_negacao(fator_bool.fator_bool)}
    			  | {sem_negacao} fator_bool;
-   fator_bool = 
+   			  
+   			   
+ fator_bool = 
    			   {verdade} true
    			  | {falso} false
    			  | {id} identificador;
  
  
- chamada   = {chamada} identificador l_par lista_exp r_par;
+ chamada   = {chamada} identificador l_par lista_exp r_par
+				{-> New chamada.chamada(lista_exp.lista_exp)};
+ 
+ 
  
  lista_exp = {lista} 
- 			 | {lista_virgula} exp virgula_exp*;
- 	virgula_exp = {virgula_exp} virgula exp;	  
+ 			 | {lista_virgula} exp virgula_exp*
+ 			 {-> New lista_exp.lista_exp(exp.exp, [virgula_exp.virgula_exp])};
+ 			 
+ 			 
+ 	virgula_exp = {virgula_exp} virgula exp
+ 					{-> New virgula_exp.virgula_exp(exp.exp)};	
+ 	
+ 	 
  
  outra 	   = {while} while l_par cal_exp r_par comando 
+ 				{-> New outra.while(cal_exp.cal_exp, comando.comando)}
   			 | {atribuicao} var atribuicao cal_exp
+  			 	{-> New outra.atribuicao(cal_exp.cal_exp)}
   			 | {chamada_comando} chamada final_linha
+  			 	{-> New outra.chamada_comando(chamada.chamada)}
  			 | {bloco} bloco;
+ 			 
+ 			
  
  comando   = {condicional} condicional;
  
- condicional = {casado_cond} casam_cond | {sem_casam_cond} sem_casam_cond;
-   casam_cond = {if_else_casado} if l_par cal_exp r_par casam_cond else casam_cond2
-   				| {outra} outra;
-   casam_cond2 = {casam2}casam_cond;
-   sem_casam_cond = {if}if l_par cal_exp r_par condicional
-   					| {if_else_sem_casar} if l_par cal_exp r_par casam_cond else sem_casam_cond;
- 			
+
+ //ALTEREI PRA SUMIR O ERRO, nao eh a producao correta
+ condicional  = {cond} if l_par fator_bool r_par
+ 	{-> New condicional.a_cond(fator_bool.fator_bool)};
+ 
+ 
+ 
+ 
+ 
+Abstract Syntax Tree
+
+	programa = {decs} dec_var_const* dec_proc_fun*;
+	
+	dec_var_const      = {variavel} dec_var 
+			           | {const}    dec_const;
+			           
+	dec_var    = {dec} declaracao;
+ 
+	dec_const  = {constante} declaracao;
+	
+	declaracao = {declaracao} tipo id_inicializacao outras_declaracoes*;
+	
+	outras_declaracoes = {varios} id_inicializacao;
+	
+	id_inicializacao   = {id}      identificador 
+                       | {inicial} inicializacao;
+                       
+	inicializacao      = {inicializacao} tipo_exp;
+	
+	tipo_exp           = {expressao}  exp 
+                       | {array_ext}  array_ext 
+		               | {array_comp} array_comp;
+		               
+	array_ext          = {arraye}   exp seq_array_ext*;
+
+	seq_array_ext      = {seqarray} exp;
+	
+	array_comp         = {arrayc}      exp
+                       | {multiarrayc} array_comp;
+ 
+ 	tipo               = {tipobase}     tipo_base 
+                       | {tipocomposto} tipo_base cal_exp;
+                    	
+	tipo_base          = {inteiro} int 
+                       | {real}    real 
+		               | {boleano} bool;	            
+ 			 	
+	dec_proc_fun       = {proc} dec_proc 
+                       | {fun}  dec_fun;
+                       
+	dec_proc           = {dec_proc} parametros comando;
+                       
+	dec_fun            = {dec_fun} tipo parametros exp;
+	
+	parametros         = {vazio} 
+                       | {parametros} parametro outros_parametros*;
+                    
+    outros_parametros  = {outros_parametros} parametro;
+    
+    parametro          = {parametro} tipo_parametro;
+    
+    tipo_parametro     = {tipobase}       tipo_base 
+                       | {tipo_parametro} tipo_parametro;
+                       
+	bloco              = {bloco} dec_var_const* comando;
+
+	numeral            = {int}  number_decimal 
+                   	   | {real} number_real 
+		               | {hexa} number_hexa;	
+		            
+	variavel           = {variavelid}  identificador
+					   | {variavelexp} variavel exp;	            
+		            
+	exp				   = {chamada}       chamada 
+    				   | {menos}         exp 
+           			   | {bloco_exp}     bloco_exp 
+           			   | {expcalculo}    cal_exp
+           			   | {var}           var
+           			   | {cond_ternaria} cal_exp  cond2;
+           			
+	cond2		 	   = {cond2} cal_exp cond3;
+ 		 	
+	cond3			   = {cond3} cal_exp;
+	
+	bloco_exp 		   = {bloco_exp} dec_const* exp;
+	
+	cal_exp   		   = {soma_recursao} cal_exp soma termo 
+	       			   | {termo_base}    termo;
+	       			   
+    termo              = {termo_recursao} termo mult_div fator 
+           			   | {fator_base}     fator;
+           
+	fator			   = {com_parentes} cal_exp
+	                   | {numero} numeral
+	                   | {bool_exp} bool_exp;
+	       
+	mult_div           = {vezes}   mult 
+                       | {divisao} div 
+	                   | {modulo}  mod;
+	       
+	soma			   = {mais}  plus 
+	                   | {menor} minus;
+ 
+	comparison         = {igual} igual 
+					   | {menor} menor; 
+	       
+	bool_exp     	   = {compare_exp} bool_exp comparison bool_exp2 
+ 			           | {bool_exp2}   bool_exp2; 
+           
+	bool_exp2		   = {or_recursao}     bool_exp2 termo_bool
+ 			  		   | {termo_bool_base} termo_bool;
+           
+    termo_bool         = {termo_bool_recursao} termo_bool neg 
+   			  		   | {neg_base}            neg;
+   			  		   
+	neg                = {com_negacao} fator_bool
+   			  		   | {sem_negacao} fator_bool;
+   			  		   
+	fator_bool		   = {verdade} true
+   			  		   | {falso} false
+   			  		   | {id} identificador;
+   			  		   
+	chamada            = {chamada} lista_exp; 		   
+	  
+	lista_exp 		   = {lista} 
+ 			           | {lista_virgula} exp virgula_exp*;
+ 			           
+	virgula_exp        = {virgula_exp} exp;
+ 			 
+ 	outra 	           = {while}           cal_exp comando 
+  			 		   | {atribuicao}      cal_exp
+  			 		   | {chamada_comando} chamada
+  			 		   | {bloco}           bloco;		 
+ 			 
+	comando            = {condicional} condicional;
+ 		
+	condicional        = {cond} fator_bool;	 
+ 			 

@@ -86,14 +86,14 @@ Productions
 				    	{-> New dec_var.dec(declaracao.declaracao)};
  
  dec_const          = {constante} cons declaracao
-    					{-> New dec_const.dec(declaracao.declaracao)};
+    					{-> New dec_const.constante(declaracao.declaracao)};
  
  declaracao         = {declaracao} tipo id_inicializacao outras_declaracoes* final_linha
  						{-> New declaracao.declaracao(tipo.tipo, 
  														id_inicializacao.id_inicializacao,
  														[outras_declaracoes.outras_declaracoes])};
 
- outras_declaracoes = {varios} virgula id_inicializacao;
+ outras_declaracoes = {varios} virgula id_inicializacao
  						{-> New outras_declaracoes.varios(id_inicializacao.id_inicializacao)};
 
  id_inicializacao   = {id}      identificador 
@@ -108,15 +108,15 @@ Productions
  
  array_ext          = {arraye}   l_col exp seq_array_ext* r_col
       					{-> New array_ext.arraye(exp.exp,
-      											   [seq_array_ext, seq_array_ext])};
+      											   [seq_array_ext.seq_array_ext])};
  
  seq_array_ext      = {seqarray} virgula exp
- 						{-> New seq_array_ext.seq_array_ext(exp.texp)};
+ 						{-> New seq_array_ext.seqarray(exp.exp)};
 
  array_comp         = {arrayc}      l_col identificador vert_bar exp        r_col
  						{-> New array_comp.arrayc(exp.exp)}
                     | {multiarrayc} l_col identificador vert_bar array_comp r_col
-                    	{-> New array_comp.arrayc(array_comp.array_comp)};
+                    	{-> New array_comp.multiarrayc(array_comp.array_comp)};
  
  tipo               = {tipobase}     tipo_base 
                     | {tipocomposto} tipo_base l_col cal_exp r_col
@@ -177,7 +177,7 @@ Productions
 
  variavel 			= {variavelid}  identificador
       				| {variavelexp} variavel l_col exp r_col
-      					{-> New variavel.ariavelexp(variavel.variavel, exp.exp)};
+      					{-> New variavel.variavelexp(variavel.variavel, exp.exp)};
           
 
  //e esse memos era pra ser soma?
@@ -266,7 +266,7 @@ Productions
  
  lista_exp = {lista} 
  			 | {lista_virgula} exp virgula_exp*
- 			 {-> New lista_exp.lista_exp(exp.exp, [virgula_exp.virgula_exp])};
+ 			 {-> New lista_exp.lista_virgula(exp.exp, [virgula_exp.virgula_exp])};
  			 
  			 
  	virgula_exp = {virgula_exp} virgula exp
@@ -289,7 +289,7 @@ Productions
 
  //ALTEREI PRA SUMIR O ERRO, nao eh a producao correta
  condicional  = {cond} if l_par fator_bool r_par
- 	{-> New condicional.a_cond(fator_bool.fator_bool)};
+ 	{-> New condicional.cond(fator_bool.fator_bool)};
  
  
  
